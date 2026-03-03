@@ -1,0 +1,69 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Tenants</h1>
+
+      <button 
+        *ngIf="isAdmin()" 
+        class="btn-primary" 
+        (click)="openCreate()">
+        + Add Tenant
+      </button>
+    </div> <!-- ✅ YOU WERE MISSING THIS -->
+
+    <!-- Modal Form -->
+    <app-tenant-form
+      *ngIf="showForm && isAdmin()"
+      (save)="addTenant($event)"
+      (cancel)="closeForm()">
+    </app-tenant-form>
+
+    <!-- Loading -->
+    <div class="loading" *ngIf="loading">
+      Loading tenants...
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && tenants.length === 0">
+      <p>No tenants found. Click "+ Add Tenant" to get started.</p>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrapper" *ngIf="!loading && tenants.length > 0">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Tenant Name</th>
+            <th>Email</th>
+            <th>Property</th>
+            <th>Phone</th>
+            <th>Lease Start</th>
+            <th>Lease End</th>
+            <th *ngIf="isAdmin()">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let t of tenants">
+            <td>{{ t.tenant_name }}</td>
+            <td>{{ t.tenant_email }}</td>
+            <td>{{ t.property_name }}</td>
+            <td>{{ t.phone || '—' }}</td>
+            <td>{{ t.lease_start | date:'mediumDate' }}</td>
+            <td>{{ t.lease_end ? (t.lease_end | date:'mediumDate') : 'Ongoing' }}</td>
+
+            <td class="actions-cell" *ngIf="isAdmin()">
+              <button class="btn-secondary" (click)="openEdit(t)">Edit</button>
+              <button class="btn-danger" (click)="onDelete(t.id)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>

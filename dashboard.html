@@ -1,0 +1,103 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      <p>Welcome back, <strong>{{ user?.name }}</strong>!</p>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading" *ngIf="loading">
+      Loading stats...
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid" *ngIf="!loading">
+
+      <!-- ================= ADMIN VIEW ================= -->
+      <ng-container *ngIf="isAdmin; else userView">
+
+        <div class="stat-card blue">
+          <div class="stat-icon">🏠</div>
+          <div class="stat-info">
+            <h3>{{ stats.totalProperties }}</h3>
+            <p>Total Properties</p>
+          </div>
+        </div>
+
+        <div class="stat-card green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <h3>{{ stats.totalTenants }}</h3>
+            <p>Active Tenants</p>
+          </div>
+        </div>
+
+        <div class="stat-card teal">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <h3>₹{{ stats.totalPaid | number }}</h3>
+            <p>Total Collected</p>
+          </div>
+        </div>
+
+        <div class="stat-card yellow">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <h3>₹{{ stats.totalPending | number }}</h3>
+            <p>Pending Payments</p>
+          </div>
+        </div>
+
+        <div class="stat-card red">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-info">
+            <h3>{{ stats.overdueCount }}</h3>
+            <p>Overdue Payments</p>
+          </div>
+        </div>
+
+      </ng-container>
+
+      <!-- ================= USER VIEW ================= -->
+      <ng-template #userView>
+
+        <div class="stat-card blue">
+          <div class="stat-icon">🏠</div>
+          <div class="stat-info">
+            <h3>₹{{ stats.myRent | number }}</h3>
+            <p>My Rent</p>
+          </div>
+        </div>
+
+        <div class="stat-card yellow">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-info">
+            <h3>₹{{ stats.totalPending | number }}</h3>
+            <p>My Pending</p>
+          </div>
+        </div>
+
+        <div class="stat-card red">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-info">
+            <h3>{{ stats.overdueCount }}</h3>
+            <p>My Overdue</p>
+          </div>
+        </div>
+
+        <div class="stat-card green">
+          <div class="stat-icon">📜</div>
+          <div class="stat-info">
+            <h3>₹{{ stats.totalPaid | number }}</h3>
+            <p>My Payment History (Total Paid)</p>
+          </div>
+        </div>
+
+      </ng-template>
+
+    </div>
+  </main>
+</div>

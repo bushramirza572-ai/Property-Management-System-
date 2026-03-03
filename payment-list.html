@@ -1,0 +1,90 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Payments</h1>
+      <button class="btn-primary" *ngIf="isAdmin && !showForm" (click)="openCreate()">+ Record Payment</button>
+    </div>
+
+    <!-- INLINE FORM instead of modal -->
+    <div *ngIf="showForm" style="background:white; border-radius:12px; padding:32px; margin-bottom:24px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+      <h2 style="margin-bottom:20px; color:#2C3E50;">{{ selectedPayment ? 'Edit Payment' : 'Record Payment' }}</h2>
+      
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; margin-bottom:6px;">Tenant</label>
+        <select [(ngModel)]="payForm.tenant_id" (change)="onTenantChange()" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+          <option value="">-- Select Tenant --</option>
+          <option *ngFor="let t of tenants" [value]="t.id">{{ t.tenant_name }} ({{ t.property_name }})</option>
+        </select>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:6px;">Amount (₹)</label>
+          <input type="number" [(ngModel)]="payForm.amount" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;" />
+        </div>
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:6px;">Status</label>
+          <select [(ngModel)]="payForm.status" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;">
+            <option value="pending">Pending</option>
+            <option value="paid">Paid</option>
+            <option value="overdue">Overdue</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:6px;">Due Date</label>
+          <input type="date" [(ngModel)]="payForm.due_date" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;" />
+        </div>
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:6px;">Payment Date</label>
+          <input type="date" [(ngModel)]="payForm.payment_date" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;" />
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="display:block; font-weight:600; margin-bottom:6px;">Notes (optional)</label>
+        <input type="text" [(ngModel)]="payForm.notes" placeholder="e.g. Late payment" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:6px; font-size:14px;" />
+      </div>
+
+      <div *ngIf="formError" style="background:#fee2e2; color:#b91c1c; padding:10px; border-radius:6px; margin-bottom:12px;">{{ formError }}</div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px;">
+        <button class="btn-secondary" (click)="cancelForm()">Cancel</button>
+        <button class="btn-primary" (click)="submitForm()" [disabled]="formLoading">
+          {{ formLoading ? 'Saving...' : 'Save Payment' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="loading">Loading payments...</div>
+
+    <table class="data-table" *ngIf="!loading && payments.length > 0">
+      <thead>
+        <tr>
+          <th>Tenant</th><th>Property</th><th>Amount</th>
+          <th>Due Date</th><th>Paid On</th><th>Status</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of payments">
+          <td>{{ p.tenant_name }}</td>
+          <td>{{ p.property_name }}</td>
+          <td>₹{{ p.amount | number }}</td>
+          <td>{{ p.due_date | date:"mediumDate" }}</td>
+          <td>{{ p.payment_date ? (p.payment_date | date:"mediumDate") : "—" }}</td>
+          <td><span class="badge" [ngClass]="statusClass(p.status)">{{ p.status }}</span></td>
+          <td>
+            
+            <button class="btn-secondary" *ngIf="isAdmin" (click)="openEdit(p)">Edit</button>
+            <button class="btn-danger" *ngIf="isAdmin" (click)="onDelete(p.id)">Delete</button>
+            <button class="btn-success" *ngIf="p.status !== 'paid' && isAdmin" (click)="markPaid(p)">Mark Paid</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p *ngIf="!loading && payments.length === 0">No payment records found.</p>
+  </main>
+</div>

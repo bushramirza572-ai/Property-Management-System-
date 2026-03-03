@@ -1,0 +1,80 @@
+<form [formGroup]="tenantForm" (ngSubmit)="onSubmit()">
+
+<div style="position:fixed; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; z-index:9999;">
+  <div style="background:#ffffff; border-radius:12px; padding:32px; width:480px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+
+    <h2 style="margin-bottom:20px; color:#2C3E50;">
+      {{ tenant ? "Edit Tenant" : "Add Tenant" }}
+    </h2>
+
+    <div style="background:#FDEDEC; color:#922B21; padding:10px 14px; border-radius:6px; margin-bottom:14px; font-size:13px;" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <!-- User Dropdown -->
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Tenant User</label>
+      <select formControlName="user_id" class="form-control">
+        <option value="">-- Select User --</option>
+        <option *ngFor="let u of users" [value]="u.id">
+          {{ u.name }} ({{ u.email }})
+        </option>
+      </select>
+    </div>
+
+    <!-- Property Dropdown -->
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Property</label>
+      <select formControlName="property_id" class="form-control">
+        <option value="">-- Select Property --</option>
+        <option *ngFor="let p of properties" [value]="p.id">
+          {{ p.name }} (₹{{ p.rent_amount }})
+        </option>
+      </select>
+    </div>
+
+    <!-- Phone -->
+    <div style="margin-bottom:16px;">
+      <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Phone</label>
+      <input type="tel"
+             formControlName="phone"
+             placeholder="+91 9876543210"
+             style="width:100%; padding:10px 12px; border:1px solid #DDD; border-radius:6px; font-size:14px;" />
+    </div>
+
+    <!-- Lease Dates -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+      <div>
+        <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Lease Start</label>
+        <input type="date"
+               formControlName="lease_start"
+               style="width:100%; padding:10px 12px; border:1px solid #DDD; border-radius:6px; font-size:14px;" />
+      </div>
+      <div>
+        <label style="display:block; font-size:13px; font-weight:600; margin-bottom:6px;">Lease End (optional)</label>
+        <input type="date"
+               formControlName="lease_end"
+               style="width:100%; padding:10px 12px; border:1px solid #DDD; border-radius:6px; font-size:14px;" />
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:24px;">
+      <button type="button"
+              (click)="onCancel()"
+              style="padding:8px 18px; border:none; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; background:#ECF0F1; color:#2C3E50;">
+        Cancel
+      </button>
+
+      <button type="submit"
+        [disabled]="loading"
+        style="padding:8px 18px; border:none; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer; background:#2E86C1; color:#fff;"
+        [style.opacity]="loading ? '0.6' : '1'">
+  {{ loading ? "Saving..." : "Save Tenant" }}
+</button>
+    </div>
+
+  </div>
+</div>
+
+</form>

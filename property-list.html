@@ -1,0 +1,43 @@
+<div class="layout">
+  <app-sidebar></app-sidebar>
+
+  <main class="main-content">
+    <div class="page-header">
+      <h1>Properties</h1>
+      <button
+        class="btn-primary"
+        *ngIf="user?.role === 'admin'"
+        (click)="openCreate()">
+        + Add Property
+      </button>
+    </div>
+
+    <!-- Loading state -->
+    <div class="loading" *ngIf="loading">Loading...</div>
+
+    <!-- Empty state -->
+    <div class="empty-state" *ngIf="!loading && properties.length === 0">
+      <p>No properties found. Click "+ Add Property" to get started.</p>
+    </div>
+
+    <!-- Property cards -->
+    <div class="card-grid" *ngIf="!loading && properties.length > 0">
+      <div class="card" *ngFor="let p of properties">
+        <div class="card-header">
+          <h3>{{ p.name }}</h3>
+          <span class="badge" [ngClass]="p.status">{{ p.status }}</span>
+        </div>
+
+        <p class="card-address">{{ p.address }}</p>
+        <p><strong>Type:</strong> {{ p.type }}</p>
+        <p><strong>Rent:</strong> ₹{{ p.rent_amount | number }}</p>
+
+        <div class="card-actions" *ngIf="user?.role === 'admin'">
+          <button class="btn-secondary" (click)="openEdit(p)">Edit</button>
+          <button class="btn-danger" (click)="onDelete(p.id)">Delete</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>

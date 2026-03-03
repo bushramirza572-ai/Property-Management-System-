@@ -1,0 +1,22 @@
+.modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 9999 !important;
+}
+
+.modal {
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 32px !important;
+  width: 480px !important;
+  max-width: 95vw !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+  position: relative !important;
+  z-index: 10000 !important;
+}

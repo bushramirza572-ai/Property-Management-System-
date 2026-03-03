@@ -1,0 +1,51 @@
+<div class="modal-overlay" style="background: rgba(0,0,0,0.7); position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:9999; display:flex; align-items:center; justify-content:center;">
+  <div class="modal" style="background:white; padding:2rem; border-radius:8px; width:500px; color:black;">
+    <h2>{{ payment ? "Edit Payment" : "Record Payment" }}</h2>
+    <div class="error" *ngIf="error">{{ error }}</div>
+
+    <div class="form-group">
+      <label>Tenant</label>
+      <select [(ngModel)]="form.tenant_id" (change)="onTenantChange()">
+        <option value="">-- Select Tenant --</option>
+        <option *ngFor="let t of tenants" [value]="t.id">
+          {{ t.tenant_name }} ({{ t.property_name }})
+        </option>
+      </select>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount (₹)</label>
+        <input type="number" [(ngModel)]="form.amount" />
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select [(ngModel)]="form.status">
+          <option value="pending">Pending</option>
+          <option value="paid">Paid</option>
+          <option value="overdue">Overdue</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Due Date</label>
+        <input type="date" [(ngModel)]="form.due_date" />
+      </div>
+      <div class="form-group">
+        <label>Payment Date</label>
+        <input type="date" [(ngModel)]="form.payment_date" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Notes (optional)</label>
+      <input type="text" [(ngModel)]="form.notes" placeholder="e.g. Late payment" />
+    </div>
+    <div class="form-actions">
+      <button class="btn-secondary" (click)="onCancel()">Cancel</button>
+      <button class="btn-primary"   (click)="onSubmit()" [disabled]="loading">
+        {{ loading ? "Saving..." : "Save Payment" }}
+      </button>
+    </div>
+  </div>
+</div>
+
